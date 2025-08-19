@@ -4,6 +4,9 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import { typeDefs } from "./src/schema/typeDefs.js";
 import { resolvers } from "./src/schema/resolvers.js";
+import { connectDB } from "./src/config/connectDB.js";
+
+connectDB(); 
 
 const server = new ApolloServer({
   typeDefs,
