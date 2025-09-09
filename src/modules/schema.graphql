@@ -1,17 +1,31 @@
-type Query{
-    messages : [Message!]!
+type customError{
+    message: String!, 
+    status: String
+}
 
+union commentResult = Comment | customError
+
+enum sortOrder {
+    ASC
+    DESC
+}
+
+type Query{
+    messages: [Message!]!
     users: [User!]!
     user(id: ID!): User
-
     posts: [Post!]!
     post(id: ID!): Post
-
     comments: [Comment!]!
-    comment(id: ID!): Comment
+    comment(id: ID!): commentResult
+    paginatedPosts(page: Int!, limit: Int!, sortOrder: sortOrder): [Post!]!
 
 }
 
 type Mutation{
-    postMessage(content: String!, author: String!) : Message!
-}
+    postMessage(content: String!, author: String!) : Message! 
+    updateUser(id: ID!, name: String, email: String): User!
+    deleteComment(id: ID!) : commentResult 
+    addPost(title: String!, authorId: ID!) : Post!
+    addComment(content: String!, postId: ID!) : Comment!
+    }
