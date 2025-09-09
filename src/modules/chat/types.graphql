@@ -1,0 +1,6 @@
+type chat{
+    id: ID!
+    content: String!
+    receiver: String!
+    sender: String!
+}

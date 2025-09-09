@@ -2,6 +2,7 @@ import { User } from "./model/userModel.js";
 import bcrypt from 'bcrypt'; 
 import jwt from 'jsonwebtoken'; 
 import dotenv from 'dotenv'; 
+import { pubsub } from "../../server/pubsub.js";
 dotenv.config(); 
 
 const secret = process.env.JWT_KEY; 
@@ -32,6 +33,14 @@ export const userMutationResolvers = {
                 throw new Error('Incorrect login Password!');
             }
 
+            // marking user online
+            existing.isOnline = true; 
+            await existing.save(); 
+
+            // online subscription 
+            pubsub.publish("USER_ONLINE",{ userOnline: existing}); 
+            console.log('user has loggedIn and is online'); 
+
             const token = jwt.sign({
                 name: existing.name, 
                 email: existing.email, 
@@ -45,4 +54,25 @@ export const userMutationResolvers = {
             console.log('login unsuccessful', error); 
         }
     },
+
+    logOutUser : async(_, __, context) => {
+        let user = context.user;
+        let dbUser = await User.findOne({_id: user.user._id}); 
+        console.log('user found', dbUser); 
+
+        if(!dbUser){
+            throw new Error('user not found!'); 
+        }
+
+        if(dbUser.isOnline === false){
+            throw new Error('user is not online'); 
+        }
+        dbUser.isOnline = false; 
+        await dbUser.save(); 
+
+        pubsub.publish("USER_OFFLINE", {userOffline: dbUser}); 
+        console.log('user has loggedOut and is offline!'); 
+        return true; 
+
+    }
 }; 

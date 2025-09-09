@@ -4,14 +4,12 @@ dotenv.config();
 
 const secret = process.env.JWT_KEY; 
 
-export const authToken = async(token) => {
+export const authToken = (token) => {
+    try {
+        const decoded = jwt.verify(token, secret);
+        return { user: decoded };
+    } catch (error) {
+        return { user: null };
 
-    try{
-        const decoded = jwt.verify(token, secret); 
-        return decoded;  
-    }
-    catch(error){
-        console.log('token verification failed', error);
-        return null; 
     }
 }

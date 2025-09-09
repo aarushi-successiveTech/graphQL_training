@@ -48,7 +48,7 @@ export async function createExpressServer() {
             }
             if(token){
               try{
-                user = await authToken(token); 
+                user = await authToken(token);  
               }
               catch(error){
                 console.log(error); 
@@ -61,7 +61,6 @@ export async function createExpressServer() {
             throw new Error('Authentication Error');
         }
       },
-
     })
   );
 

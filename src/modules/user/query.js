@@ -1,4 +1,3 @@
-import { authRole } from "./middleware/authRole.js";
 import { User } from "./model/userModel.js";
 
 export const userQueryResolvers = {
@@ -13,5 +12,5 @@ export const userQueryResolvers = {
         authRole(context.user, ['admin']); 
         const allUsers = await User.find();
         return allUsers; 
-    } 
+    }
 }
