@@ -48,7 +48,7 @@ export async function createExpressServer() {
             }
             if(token){
               try{
-                user = authToken(token); 
+                user = await authToken(token);  
               }
               catch(error){
                 console.log(error); 
@@ -61,7 +61,6 @@ export async function createExpressServer() {
             throw new Error('Authentication Error');
         }
       },
-      // context : async() => ({pubsub}), 
     })
   );
 
@@ -74,17 +73,6 @@ export async function createExpressServer() {
   useServer(
     {
       schema,
-      // context: async (ctx) => {
-      //   try{
-      //       const token = ctx.connectionParams?.authorization; 
-      //       const {user} = await authToken({headers: {authorization: token}});
-      //       return {user, pubsub}; 
-      //   }
-      //   catch(error){
-      //       console.log('Auth Error');
-      //       throw new Error('unsuccessful Authentication!');
-      //   }
-      // }, // 👈 inject pubsub in WS context
       context: async() => {
         return ({pubsub}) 
       }

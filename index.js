@@ -1,3 +1,7 @@
+import { createApolloServer } from "./src/server/express.js";
+
+const httpServer = await createApolloServer(4000);
+
 // index.js
 // import { ApolloServer } from "@apollo/server";
 // import { startStandaloneServer } from "@apollo/server/standalone";

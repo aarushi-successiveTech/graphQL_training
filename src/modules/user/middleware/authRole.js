@@ -3,6 +3,6 @@ export const authRole = (user, allowedRoles)=> {
         throw new Error('user not authenticated');
     }
     if(!allowedRoles.includes(user.role)){
-        throw new Error('invalid user role');
+        throw new Error('Unauthenticated user!');
     }
 }
