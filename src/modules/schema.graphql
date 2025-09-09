@@ -3,6 +3,10 @@ type customError{
     status: String
 }
 
+type AuthPayload{
+    token: String!
+}
+
 union commentResult = Comment | customError
 
 enum sortOrder {
@@ -19,13 +23,31 @@ type Query{
     comments: [Comment!]!
     comment(id: ID!): commentResult
     paginatedPosts(page: Int!, limit: Int!, sortOrder: sortOrder): [Post!]!
+    displayUsers: [User!]
+    allChats(sender: String!, receiver: String!): [chat!]!
 
 }
 
 type Mutation{
+    #blog module mutation
     postMessage(content: String!, author: String!) : Message! 
     updateUser(id: ID!, name: String, email: String): User!
     deleteComment(id: ID!) : commentResult 
     addPost(title: String!, authorId: ID!) : Post!
     addComment(content: String!, postId: ID!) : Comment!
+    
+    # user module mutation
+    addUser(name: String!, email: String!, password: String!, role: String!) : User!
+    loginUser(email: String!, password: String!) : AuthPayload!
+    logOutUser: Boolean!
+
+    # chat module mutation
+    postChat(content: String!, sender: String!, receiver: String!): chat!
+
     }
+
+type Subscription{
+    messagePosted: Message!
+    userOnline: User!
+    userOffline: User!
+}

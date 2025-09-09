@@ -1,0 +1,14 @@
+enum Role {
+    admin
+    user
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    password: String!
+    role: Role!
+    isOnline: Boolean!
+    isOffline: Boolean!
+}

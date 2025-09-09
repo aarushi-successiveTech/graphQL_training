@@ -1,21 +1,40 @@
 // index.js
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
-import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-import { typeDefs } from "./src/schema/typeDefs.js";
-import { resolvers } from "./src/schema/resolvers.js";
-import { connectDB } from "./src/config/connectDB.js";
+// import { ApolloServer } from "@apollo/server";
+// import { startStandaloneServer } from "@apollo/server/standalone";
+// import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+// import { typeDefs } from "./src/schema/typeDefs.js";
+// import { resolvers } from "./src/schema/resolvers.js";
+// import { connectDB } from "./src/config/connectDB.js";
+// import { authToken } from "./src/modules/user/middleware/authToken.js";
 
-connectDB(); 
+// connectDB(); 
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginLandingPageLocalDefault()],
+// const server = new ApolloServer({
+//   typeDefs,
+//   resolvers,
+//   plugins: [ApolloServerPluginLandingPageLocalDefault()],
+//   context: async({req}) =>{
+//     try{
+//       const {user} = await authToken(req); 
+//       return {user}; 
+//     }
+//     catch(error){
+//       console.log(error); 
+//       throw new Error('user not available'); 
+//     }
+//   }
+// });
+
+// const { url } = await startStandaloneServer(server, {
+//   listen: { port: 4000 },
+// });
+
+// console.log(`🚀 Server ready at ${url}`);
+
+import { createApolloServer } from "./src/server/express.js";
+
+const httpServer = await createApolloServer(4000);
+
+httpServer.listen(4000, () => {
+  console.log(`🚀 Query/Mutation endpoint: http://localhost:4000/graphql`);
 });
-
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
-});
-
-console.log(`🚀 Server ready at ${url}`);
